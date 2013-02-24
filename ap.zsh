@@ -1,12 +1,13 @@
 function _ap_usage() {
   echo "ap - version 1.0
   Usage:
-    ap install [package]+ (install a package with pacman)
-    ap remove [package]+  (remove a package, its dependencies and package that depends from it)
-    ap compinst [package] (compile + install from aur)
-    ap search [keyword]+  (search in pacman and aur)
-    ap update             (system update)
-    ap bin [package]+      (list files installed by package in a /bin/ directory)
+    ap install [package]+ install a package with pacman
+    ap remove [package]+  remove a package, its dependencies and packages that depends from it
+    ap compinst [package] compile and install from aur, keep packages in ~/pkg
+    ap search [keyword]+  search in pacman and aur
+    ap update             system update
+    ap info [package]+    show informations about a package
+    ap bin [package]+     list files installed by package in a /bin/ directory
     "
 }
 
@@ -31,12 +32,15 @@ function ap() {
       sudo pacman -S ${*:2}
       ;;
     (compinst)
+      mkdir -p ~/pkg
+      pushd ~/pkg
       package=$2
       cower -d $package
       cd $package
       makepkg -csi
       cd ..
       rm -rf $package
+      popd
       ;;
     (remove)
       sudo pacman -Rcsn ${*:2}
@@ -77,10 +81,7 @@ function _ap_completion () {
     (compinst)
       reply=($(cower -sq $1))
       ;;
-    (search)
-      reply=($(pacman -Sqs $1 | xargs ; cower -sq $1 | xargs))
-      ;;
-    (info)
+    (search|info)
       reply=($(pacman -Sqs $1 | xargs ; cower -sq $1 | xargs))
       ;;
     (*)
