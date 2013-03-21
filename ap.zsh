@@ -22,6 +22,7 @@ function ap() {
         --latest 5 \
         --protocol http \
         --save /etc/pacman.d/mirrorlist
+      grep -v '#' /etc/pacman.d/mirrorlist
       curl -s https://www.archlinux.org/feeds/news/ \
         | xmllint --xpath //item/title\ \|\ //item/pubDate /dev/stdin \
         | sed -r -e 's:<title>([^<]*?)</title><pubDate>([^<]*?)</pubDate>:\2\t\1\n:g'
@@ -59,7 +60,7 @@ function ap() {
     (bin)
       pacman -Qql ${*:2} | grep /bin/ | egrep -v '/bin/$'
       ;;
-    (-h|--help|*)
+    (help|-h|--help|*)
       _ap_usage
       ;;
   esac
