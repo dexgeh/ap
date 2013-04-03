@@ -54,7 +54,7 @@ function ap() {
       package=$2
       pacman -Si $package
       if [[ $? = 1 ]] then
-        cower -si $package
+        cower -i $package
       fi
       ;;
     (bin)
