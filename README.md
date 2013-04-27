@@ -10,12 +10,15 @@ Ensure that zsh completion is loaded in your .zshrc, then load ap with
 in your rc.
 
 Usage:
-
-    ap install [package]+ install a package with pacman
-    ap remove [package]+  remove a package, its dependencies and packages that depends from it
-    ap compinst [package] compile and install from aur, keep packages in ~/pkg
-    ap search [keyword]+  search in pacman and aur
-    ap update             system update
-    ap info [package]+    show informations about a package
-    ap bin [package]+     list files installed by package in a /bin/ directory
+    ap install [package]+       install a package with pacman
+    ap remove [package]+        remove a package, its dependencies and packages
+                                that depends from it
+    ap compinst [package]       compile and install from aur, keep packages in
+                                ~/pkg
+    ap search [keyword]+        search in pacman and aur
+    ap update                   system update
+    ap info [package]+          show informations about a package
+    ap bin [package]+           list files installed by package in a /bin/
+                                directory
+    ap localinstall [file]+     install a package from file .pkg.tar.xz
 
