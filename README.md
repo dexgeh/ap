@@ -10,6 +10,7 @@ Ensure that zsh completion is loaded in your .zshrc, then load ap with
 in your rc.
 
 Usage:
+
     ap install [package]+       install a package with pacman
     ap remove [package]+        remove a package, its dependencies and packages
                                 that depends from it
