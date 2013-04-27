@@ -27,7 +27,7 @@ function ap() {
         | xmllint --xpath //item/title\ \|\ //item/pubDate /dev/stdin \
         | sed -r -e 's:<title>([^<]*?)</title><pubDate>([^<]*?)</pubDate>:\2\t\1\n:g'
       sudo pacman -Syu --color=always
-      cower -v -u
+      cower -v -u -c
       ;;
     (install)
       sudo pacman -S --color=always ${*:2}
@@ -48,17 +48,20 @@ function ap() {
       ;;
     (search)
       pacman -Ss --color=always ${*:2}
-      cower -s ${*:2}
+      cower -sc ${*:2}
       ;;
     (info)
       package=$2
       pacman -Si --color=always $package
       if [[ $? = 1 ]] then
-        cower -i $package
+        cower -ic $package
       fi
       ;;
     (bin)
       pacman -Qql ${*:2} | grep /bin/ | egrep -v '/bin/$'
+      ;;
+    (localinstall)
+      sudo pacman -U ${*:2}
       ;;
     (help|-h|--help|*)
       _ap_usage
@@ -85,8 +88,11 @@ function _ap_completion () {
     (search|info)
       reply=($(pacman -Sqs $1 | xargs ; cower -sq $1 | xargs))
       ;;
+    (localinstall)
+      reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
+      ;;
     (*)
-      reply=(update install compinst remove search info bin)
+      reply=(update install compinst remove search info bin localinstall)
       ;;
   esac
 }
