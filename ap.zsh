@@ -26,6 +26,8 @@ function ap() {
         --latest 5 \
         --protocol http \
         --save /etc/pacman.d/mirrorlist
+      echo 'Server = http://delta.archlinux.fr/$repo/os/$arch' | \
+        cat - /etc/pacman.d/mirrorlist | sudo tee /etc/pacman.d/mirrorlist >/dev/null
       grep -v '#' /etc/pacman.d/mirrorlist
       curl -s https://www.archlinux.org/feeds/news/ \
         | xmllint --xpath //item/title\ \|\ //item/pubDate /dev/stdin \
