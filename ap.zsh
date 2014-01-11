@@ -11,6 +11,7 @@ function _ap_usage() {
     ap info [package]+          show informations about a package
     ap bin [package]+           list files installed by package in a /bin/
                                 directory
+    ap own [file or executable] tell which package own a file or an executable in path
     ap localinstall [file]+     install a package from file .pkg.tar.xz
     "
 }
@@ -66,6 +67,9 @@ function ap() {
     (bin)
       pacman -Qql ${*:2} | grep /bin/ | egrep -v '/bin/$'
       ;;
+    (own)
+      pacman -Qo ${*:2}
+      ;;
     (localinstall)
       sudo pacman -U ${*:2}
       ;;
@@ -73,6 +77,14 @@ function ap() {
       _ap_usage
       ;;
   esac
+}
+
+function _ap_path_completion () {
+  for pathvar in $(echo $PATH | tr : ' ') ; do
+    find $pathvar -maxdepth 1 -executable -name "$1*" -not -type d -print 2>/dev/null | \
+      cut -c $(( ${#pathvar} + 2 ))-
+  done
+  unset pathvar
 }
 
 function _ap_completion () {
@@ -93,6 +105,10 @@ function _ap_completion () {
       ;;
     (search|info)
       reply=($(pacman -Sqs $1 | xargs ; cower -sq $1 | xargs))
+      ;;
+    (own)
+      reply=($(find . -maxdepth 1 -type f -name "$1*" -print | cut -c 3- ; \
+        _ap_path_completion "$1" ))
       ;;
     (localinstall)
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
