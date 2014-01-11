@@ -21,5 +21,6 @@ Usage:
     ap info [package]+          show informations about a package
     ap bin [package]+           list files installed by package in a /bin/
                                 directory
+    ap own [file or executable] tell which package own a file or an executable in path
     ap localinstall [file]+     install a package from file .pkg.tar.xz
 
