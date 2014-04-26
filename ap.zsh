@@ -13,6 +13,7 @@ function _ap_usage() {
                                 directory
     ap own [file or executable] tell which package own a file or an executable in path
     ap localinstall [file]+     install a package from file .pkg.tar.xz
+    ap ls [package]+            list files in package
     "
 }
 
@@ -73,6 +74,9 @@ function ap() {
     (localinstall)
       sudo pacman -U ${*:2}
       ;;
+    (ls)
+      pacman -Ql ${*:2}
+      ;;
     (help|-h|--help|*)
       _ap_usage
       ;;
@@ -94,7 +98,7 @@ function _ap_completion () {
   words=($(echo $commandline))
   local command=${words[2]}
   case $command in
-    (remove|bin)
+    (remove|bin|ls)
       reply=($(pacman -Qqs $1))
       ;;
     (install)
