@@ -14,6 +14,7 @@ function _ap_usage() {
     ap own [file or executable] tell which package own a file or an executable in path
     ap localinstall [file]+     install a package from file .pkg.tar.xz
     ap ls [package]+            list files in package
+    ap clean                    clean the package cache
     "
 }
 
@@ -77,6 +78,9 @@ function ap() {
     (ls)
       pacman -Ql ${*:2}
       ;;
+    (clean)
+      pacman -Scc
+      ;;
     (help|-h|--help|*)
       _ap_usage
       ;;
@@ -118,7 +122,7 @@ function _ap_completion () {
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
       ;;
     (*)
-      reply=(update install compinst remove search info bin localinstall ls)
+      reply=(update install compinst remove search info bin localinstall ls clean)
       ;;
   esac
 }

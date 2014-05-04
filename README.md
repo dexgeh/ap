@@ -24,4 +24,4 @@ Usage:
     ap own [file or executable] tell which package own a file or an executable in path
     ap localinstall [file]+     install a package from file .pkg.tar.xz
     ap ls [package]+            list files in package
-
+    ap clean                    clean the package cache
