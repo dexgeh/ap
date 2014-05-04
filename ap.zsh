@@ -79,7 +79,7 @@ function ap() {
       pacman -Ql ${*:2}
       ;;
     (clean)
-      pacman -Scc
+      sudo pacman -Scc
       ;;
     (help|-h|--help|*)
       _ap_usage
