@@ -118,7 +118,7 @@ function _ap_completion () {
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
       ;;
     (*)
-      reply=(update install compinst remove search info bin localinstall)
+      reply=(update install compinst remove search info bin localinstall ls)
       ;;
   esac
 }
