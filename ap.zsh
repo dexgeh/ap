@@ -18,6 +18,12 @@ function _ap_usage() {
     "
 }
 
+function _ap_get_news() {
+  curl -s https://www.archlinux.org/feeds/news/ \
+  | xmllint --xpath //item/title\ \|\ //item/link\ \|\ //item/pubDate /dev/stdin \
+  | sed -r -e 's:<title>([^<]*?)</title><link>([^<]*?)</link><pubDate>([^<]*?)</pubDate>:\3\t\1\n\2\n:g'
+}
+
 function ap() {
   local command=$1
   case $command in
@@ -32,9 +38,7 @@ function ap() {
       echo 'Server = http://delta.archlinux.fr/$repo/os/$arch' | \
         cat - /etc/pacman.d/mirrorlist | sudo tee /etc/pacman.d/mirrorlist >/dev/null
       grep -v '#' /etc/pacman.d/mirrorlist
-      curl -s https://www.archlinux.org/feeds/news/ \
-        | xmllint --xpath //item/title\ \|\ //item/pubDate /dev/stdin \
-        | sed -r -e 's:<title>([^<]*?)</title><pubDate>([^<]*?)</pubDate>:\2\t\1\n:g'
+      _ap_get_news
       sudo pacman -Syu --color=always
       cower -v -u -c
       ;;
