@@ -15,6 +15,7 @@ function _ap_usage() {
     ap localinstall [file]+     install a package from file .pkg.tar.xz
     ap ls [package]+            list files in package
     ap clean                    clean the package cache
+    ap bootstrap                install needed helpers (cower, pacaur, powerpill)
     "
 }
 
@@ -122,6 +123,18 @@ function _ap_completion () {
       ;;
     (localinstall)
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
+      ;;
+    (bootstrap)
+      mkdir ~/pkg/cower
+      pushd ~/pkg/cower
+      wget https://aur.archlinux.org/packages/co/cower/PKGBUILD
+      makepkg -csi
+      cd ..
+      cower -d pacaur
+      cd pacaur
+      makepkg -csi
+      pacaur -S powerpill
+      popd
       ;;
     (*)
       reply=(update install download aurinstall remove search info bin localinstall ls clean)

@@ -10,6 +10,8 @@ Ensure that zsh completion is loaded in your .zshrc, then load ap with
 in your rc.
 
 Usage:
+
+```
     ap install [package]+       install a package with pacman
     ap remove [package]+        remove a package, its dependencies and packages
                                 that depends from it
@@ -24,4 +26,6 @@ Usage:
     ap localinstall [file]+     install a package from file .pkg.tar.xz
     ap ls [package]+            list files in package
     ap clean                    clean the package cache
-
+    ap bootstrap                install needed helpers (cower, pacaur, powerpill)
+```
+`
