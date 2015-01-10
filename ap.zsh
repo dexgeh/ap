@@ -4,8 +4,8 @@ function _ap_usage() {
     ap install [package]+       install a package with pacman
     ap remove [package]+        remove a package, its dependencies and packages
                                 that depends from it
-    ap compinst [package]       compile and install from aur, keep packages in
-                                ~/pkg
+    ap download [package]       download package from aur in ~/pkg/ ; cd in directory
+    ap aurinstall [package]+    install package from aur
     ap search [keyword]+        search in pacman and aur
     ap update                   system update
     ap info [package]+          show informations about a package
@@ -39,22 +39,20 @@ function ap() {
         cat - /etc/pacman.d/mirrorlist | sudo tee /etc/pacman.d/mirrorlist >/dev/null
       grep -v '#' /etc/pacman.d/mirrorlist
       _ap_get_news
-      sudo pacman -Syu --color=always
+      sudo powerpill -Syu --color=always
       cower -v -u -c
       ;;
     (install)
-      sudo pacman -S --color=always ${*:2}
+      sudo powerpill -S --color=always ${*:2}
       ;;
-    (compinst)
-      mkdir -p ~/pkg
-      pushd ~/pkg
+    (download)
+      cd ~/pkg
       package=$2
       cower -d $package
       cd $package
-      makepkg -csi
-      cd ..
-      rm -rf $package
-      popd
+      ;;
+    (aurinstall)
+      pacaur -S ${*:2}
       ;;
     (remove)
       sudo pacman -Rcsn --color=always ${*:2}
@@ -112,7 +110,7 @@ function _ap_completion () {
     (install)
       reply=($(pacman -Sqs $1))
       ;;
-    (compinst)
+    (download|aurinstall)
       reply=($(cower -sq $1))
       ;;
     (search|info)
@@ -126,7 +124,7 @@ function _ap_completion () {
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
       ;;
     (*)
-      reply=(update install compinst remove search info bin localinstall ls clean)
+      reply=(update install download aurinstall remove search info bin localinstall ls clean)
       ;;
   esac
 }
