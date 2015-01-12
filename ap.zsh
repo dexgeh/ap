@@ -84,6 +84,18 @@ function ap() {
     (clean)
       sudo pacman -Scc
       ;;
+    (bootstrap)
+      mkdir ~/pkg/cower
+      pushd ~/pkg/cower
+      wget https://aur.archlinux.org/packages/co/cower/PKGBUILD
+      makepkg -csi
+      cd ..
+      cower -d pacaur
+      cd pacaur
+      makepkg -csi
+      pacaur -S powerpill
+      popd
+      ;;
     (help|-h|--help|*)
       _ap_usage
       ;;
@@ -123,18 +135,6 @@ function _ap_completion () {
       ;;
     (localinstall)
       reply=($(find . -maxdepth 1 -type f -iname \*.pkg.tar.xz -print | cut -c 3-))
-      ;;
-    (bootstrap)
-      mkdir ~/pkg/cower
-      pushd ~/pkg/cower
-      wget https://aur.archlinux.org/packages/co/cower/PKGBUILD
-      makepkg -csi
-      cd ..
-      cower -d pacaur
-      cd pacaur
-      makepkg -csi
-      pacaur -S powerpill
-      popd
       ;;
     (*)
       reply=(update install download aurinstall remove search info bin localinstall ls clean)
